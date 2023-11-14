@@ -30,6 +30,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"echarts": "^5.4.3"
+		"echarts": "^5.4.3",
+		"zod": "^3.22.4"
 	}
 }

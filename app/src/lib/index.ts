@@ -1,14 +1,15 @@
-// place files you want to import through the `$lib` alias in this folder.
 import * as echarts from "echarts";
-export function GenerateStockAreaChart(divID: string, data: any) {
-  var chartDom = document.getElementById(divID);
+import type { OHLC } from "../types/klsescreener/klsescreener";
+
+export function GenerateStockAreaChart(divID: string, data: OHLC[]) {
+  const chartDom = document.getElementById(divID);
   if (!chartDom) return;
   if (echarts.getInstanceByDom(chartDom) != null) {
     echarts.getInstanceByDom(chartDom)?.dispose();
   }
-  var myChart = echarts.init(chartDom);
-  var option: echarts.EChartsOption;
-  option = {
+  const myChart = echarts.init(chartDom);
+  // let option: echarts.EChartsOption;
+  const option: echarts.EChartsOption = {
     tooltip: {
       trigger: "axis",
       position: function (pt) {
@@ -17,7 +18,7 @@ export function GenerateStockAreaChart(divID: string, data: any) {
     },
     title: {
       left: "center",
-      text: "Stock Area Chart",
+      // text: "Stock Area Chart",
     },
     toolbox: {
       feature: {
@@ -31,11 +32,20 @@ export function GenerateStockAreaChart(divID: string, data: any) {
     xAxis: {
       type: "category",
       boundaryGap: false,
-      data: data?.map((x: any) => x.date),
+      data: data?.map((x: OHLC) => x.date),
     },
     yAxis: {
       type: "value",
       boundaryGap: [0, "100%"],
+      splitLine: {
+        show: false,
+      },
+      min(extent) {
+        return extent.min - 0.5;
+      },
+      max(extent) {
+        return extent.max + 0.5;
+      },
     },
     dataZoom: [
       {
@@ -70,7 +80,7 @@ export function GenerateStockAreaChart(divID: string, data: any) {
             },
           ]),
         },
-        data: data?.map((x: any) => x.close),
+        data: data?.map((x: OHLC) => x.close),
       },
     ],
   };
