@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "Poppins";
+    font-weight: 300;
+    font-display: optional;
+    src: url("/fonts/Poppins/Poppins-Light") format("ttf");
+  }
+  @font-face {
+    font-family: "Poppins";
+    font-weight: 400;
+    font-display: optional;
+    src: url("/fonts/Poppins/Poppins-Regular") format("ttf");
+  }
+  @font-face {
+    font-family: "Poppins";
+    font-weight: 500;
+    font-display: optional;
+    src: url("/fonts/Poppins/Poppins-Medium") format("ttf");
+  }
+  @font-face {
+    font-family: "Poppins";
+    font-weight: 600;
+    font-display: optional;
+    src: url("/fonts/Poppins/Poppins-SemiBold") format("ttf");
+  }
+  @font-face {
+    font-family: "Poppins";
+    font-weight: 700;
+    font-display: optional;
+    src: url("/fonts/Poppins/Poppins-Bold") format("ttf");
+  }
+  @font-face {
+    font-family: "Poppins";
+    font-weight: 800;
+    font-display: optional;
+    src: url("/fonts/Poppins/Poppins-ExtraBold") format("ttf");
+  }
+  @font-face {
+    font-family: "Poppins";
+    font-weight: 900;
+    font-display: optional;
+    src: url("/fonts/Poppins/Poppins-Black") format("ttf");
+  }
+  html {
+    font-family: "Poppins", system-ui, sans-serif;
+  }
+  body {
+    font-size: 0.875rem;
+  }
+}
