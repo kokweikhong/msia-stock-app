@@ -1,0 +1,64 @@
+version: '3.8'
+name: 'msia-stock-app'
+services:
+  app:
+    build: 
+      context: ./../app
+      dockerfile: ./../dockerfiles/app.dockerfile
+    container_name: app 
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api-service
+    networks:
+      - msia-stock-app-network
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  api-service:
+    build:
+      context: ./../api-service
+      dockerfile: ./../dockerfiles/api-service.dockerfile
+    container_name: api-service
+    restart: always
+    ports:
+      - "8080:8080"
+    # depends_on:
+    #   - postgres 
+    networks:
+      - msia-stock-app-network
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  # postgres:
+  #   image: postgres:16.0-alpine3.18
+  #   restart: always
+  #   container_name: khongfamily-postgres 
+  #   ports:
+  #     - "5432:5432"
+  #   deploy:
+  #     mode: replicated
+  #     replicas: 1
+  #   environment:
+  #     - POSTGRES_USER=khongadmin
+  #     - POSTGRES_PASSWORD=khong1314Family
+  #     - POSTGRES_DB=khongfamily
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+  #   networks:
+  #     - khongfamily-network
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8081:8080
+#
+# volumes:
+#   pgdata:
+
+networks:
+  msia-stock-app-network:
+    name: msia-stock-app-network

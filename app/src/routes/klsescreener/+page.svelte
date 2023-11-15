@@ -12,7 +12,7 @@
   let quotes = getKLSEScreenerQuotes() as unknown as Quote[];
   let indexData: OHLC[];
   let stockData: OHLC[];
-  let stockCode: string;
+  let selectedQuote: Quote;
 
   async function getStockData(code: string) {
     stockData = await getKLSEScreenerStockData(code);
@@ -42,7 +42,7 @@
             <!-- Your next planet is {quotes}. -->
             {#each quotes as quote}
               <li
-                class="flex flex-col items-start justify-between gap-x-6 py-5 {stockCode ===
+                class="flex flex-col items-start justify-between gap-x-6 py-5 {selectedQuote?.code ===
                 quote.code
                   ? 'bg-gray-100'
                   : ''}}"
@@ -62,7 +62,7 @@
                   <button
                     on:click={() => {
                       getStockData(quote.code);
-                      stockCode = quote.code;
+                      selectedQuote = quote;
                     }}
                   >
                     <svg
@@ -116,7 +116,11 @@
                 <span>Loading...</span>
               {:then quotes}
                 <div class="flex justify-between">
-                  <h2>{stockCode ? stockCode : ""}</h2>
+                  <h2>
+                    {selectedQuote
+                      ? selectedQuote?.code + " | " + selectedQuote?.name
+                      : ""}
+                  </h2>
 
                   <span
                     class="isolate inline-flex items-center rounded-md shadow-sm"
@@ -124,15 +128,15 @@
                     <button
                       type="button"
                       class="relative inline-flex items-center rounded-l-md bg-white px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
-                      disabled={stockCode
-                        ? stockCode === quotes[0]?.code
+                      disabled={selectedQuote
+                        ? selectedQuote?.code === quotes[0]?.code
                         : false}
                       on:click={async () => {
                         let index = quotes.findIndex(
-                          (quote) => quote.code === stockCode
+                          (quote) => quote.code === selectedQuote?.code
                         );
                         await getStockData(quotes[index - 1].code);
-                        stockCode = quotes[index - 1].code;
+                        selectedQuote = quotes[index - 1];
                       }}
                     >
                       <span class="sr-only">Previous</span>
@@ -152,16 +156,17 @@
                     <button
                       type="button"
                       class="relative -ml-px inline-flex items-center rounded-r-md bg-white px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
-                      disabled={stockCode
-                        ? stockCode === quotes[quotes.length - 1]?.code
+                      disabled={selectedQuote
+                        ? selectedQuote?.code ===
+                          quotes[quotes.length - 1]?.code
                         : false}
                       on:click={async () => {
                         if (quotes.length === 0) return;
                         let index = quotes.findIndex(
-                          (quote) => quote.code === stockCode
+                          (quote) => quote.code === selectedQuote?.code
                         );
                         await getStockData(quotes[index + 1].code);
-                        stockCode = quotes[index + 1].code;
+                        selectedQuote = quotes[index + 1];
                       }}
                     >
                       <span class="sr-only">Next</span>
@@ -179,8 +184,9 @@
                       </svg>
                     </button>
                     <span class="p-2 ml-4">
-                      {quotes.findIndex((quote) => quote.code === stockCode) +
-                        1}
+                      {quotes.findIndex(
+                        (quote) => quote.code === selectedQuote?.code
+                      ) + 1}
                       /{quotes.length}
                     </span>
                   </span>

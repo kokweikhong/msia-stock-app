@@ -1,4 +1,4 @@
-package klsescreener 
+package klsescreener
 
 import (
 	"cmp"
@@ -9,6 +9,7 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const (
@@ -69,7 +70,10 @@ func GetBursaTickerHistoricalData(ticker string) ([]*OHLC, error) {
 		split := strings.Split(d[1], ",")
 
 		ohlc := new(OHLC)
-		ohlc.Date = split[0]
+		// convert string date to unix timestamp
+		dateInt, _ := strconv.Atoi(split[0])
+		date := time.UnixMilli(int64(dateInt))
+		ohlc.Date = date.Format("2006-01-02")
 		ohlc.Open = StringToFloat(split[1])
 		ohlc.High = StringToFloat(split[2])
 		ohlc.Low = StringToFloat(split[3])
